@@ -1,0 +1,16 @@
+  version: '3.8'
+
+  services:
+    db:
+      image: postgres:latest
+      ports:
+        - '5432:5432'
+      environment:
+        - POSTGRES_DB=docker
+        - POSTGRES_USER=docker
+        - POSTGRES_PASSWORD=docker
+      volumes:
+        - postgres_data:/var/lib/docker/volumes/postgres_data  # Adiciona um volume persistente
+
+  volumes:
+    postgres_data:  # Define o volume persistente
