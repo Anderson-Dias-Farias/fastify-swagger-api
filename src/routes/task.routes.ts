@@ -18,10 +18,10 @@ export async function taskRoutes(fastify: FastifyInstance) {
                 properties: {
                     title: { type: 'string' },
                     description: { type: 'string' },
-                    status: { type: 'string' },
-                    userId: { type: 'string' }
+                    status: { type: 'boolean' },
+                    dueDate: { type: 'string' }
                 },
-                required: ['title', 'description', 'status', 'userId']
+                required: ['title', 'description', 'status','dueDate']
             },
             response: {
                 201: {
@@ -55,13 +55,13 @@ export async function taskRoutes(fastify: FastifyInstance) {
             }
         }
     }, async (request, reply) => {
-
         const body = request.body as ITaskCreate;
         const bodyShema = {
             ...body,
             userId: request.user.payload.id as string
         }
         const validationResult = TaskCreateSchema.safeParse(bodyShema)
+        console.log(validationResult.error)
        
         if (!validationResult.success) {
             return reply.status(400).send({ error: "Dados inválidos" })
@@ -99,8 +99,9 @@ export async function taskRoutes(fastify: FastifyInstance) {
                                     id: { type: 'string' },
                                     title: { type: 'string' },
                                     description: { type: 'string' },
-                                    status: { type: 'string' },
-                                    userId: { type: 'string' }
+                                    status: { type: 'boolean' },
+                                    userId: { type: 'string' },
+                                    dueDate: { type: 'string' }
                                 }
                             }
                         }
@@ -189,10 +190,11 @@ export async function taskRoutes(fastify: FastifyInstance) {
                 properties: {
                     id: { type: 'string' },
                     title: { type: 'string' },
+                    dueDate: { type: 'string' },
                     description: { type: 'string' },
-                    status: { type: 'string' }
+                    status: { type: 'boolean' }
                 },
-                required: ['id', 'title', 'description', 'status']
+                required: ['id', 'title', 'description', 'status', 'dueDate']
             },
             response: {
                 200: {
@@ -205,7 +207,8 @@ export async function taskRoutes(fastify: FastifyInstance) {
                                 id: { type: 'string' },
                                 title: { type: 'string' },
                                 description: { type: 'string' },
-                                status: { type: 'string' }
+                                status: { type: 'boolean' },
+                                dueDate: { type: 'string' }
                             }
                         }
                     }
@@ -228,11 +231,13 @@ export async function taskRoutes(fastify: FastifyInstance) {
 
 
         const body = request.body as ITask;
+        console.log(body)
         const bodyShema = {
             ...body,
             userId: request.user.payload.id as string
         }
         const validationResult = TaskCreateSchema.safeParse(bodyShema)
+        console.log(validationResult.error)
        
         if (!validationResult.success) {
             return reply.status(400).send({ error: "Dados inválidos" })
